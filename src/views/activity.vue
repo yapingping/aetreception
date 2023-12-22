@@ -1,9 +1,9 @@
 <template>
     <div class="activity">
-        <form action="" method="post" :model="form">
-            <td><label for="#">筛选</label></td>
+        <form action="" method="post">
+            <td><label class="filt" for="#">筛选&nbsp;&nbsp;：</label></td>
             <td>
-                <select name="choice">
+                <select v-model="selectOpt" @change="selectChange" class="mySelect" id="mySelect" name="choice">
                     <option value="all" selected="selected">全部活动</option>
                     <option value="ing">进行中</option>
                     <option value="ed">已结束</option>
@@ -11,21 +11,18 @@
                 </select>
             </td>
         </form>
-        <div class="activity">
-            <div class="item">
-                <div class="img">
-                    <a href="#">
-                        <div class="hide">点击查看详情</div>
-                    </a>
+        <div class="Activity">
+            <div class="block" v-for="(item,index) in list" @click="detail(index)">
+                <div class="left">
+                    <div class="name">{{ item.userImg2 }}</div>
+                    <div class="college"><i class="el-icon-office-building">&nbsp;&nbsp;</i>发起学院：{{ item.hbKeyword }}</div>
                 </div>
-                <div class="info">
-                    <div class="title">主题：{}</div>
-                    <div class="college">发起学院：{}</div>
-                    <div class="time">举办时间：{}</div>
-                    <div class="place">举办地点：{}</div>
-                    <div class="max-number">活动最多人数{}</div>
-                    <div class="signup-number">报名人数：{}</div>
-                    <div class="status">举办状态：{}</div>
+                <div class="right">
+                    <div class="time"><i class="el-icon-time">&nbsp;&nbsp;</i>举办时间：{{ item.lat }}</div>
+                    <div class="place"><i class="el-icon-location">&nbsp;&nbsp;</i>举办地点：{{ item.address }}</div>
+                    <div class="max-number"><i class="el-icon-user">&nbsp;&nbsp;</i>活动最多人数：{{ item.hot }}</div>
+                    <div class="signup-number"><i class="el-icon-s-custom">&nbsp;&nbsp;</i>报名人数：{{ item.hbNum }}</div>
+                    <div class="status"><i class="el-icon-monitor">&nbsp;&nbsp;</i>举办状态：{{ item.isEnd }}</div>
                 </div>
             </div>
         </div>
@@ -34,34 +31,147 @@
 </template>
 
 <script>
-
+export default {
+    data() {
+        return {
+            list: [],
+            selectOpt: 'all',
+            info1: {
+                a: 1
+            },
+            info2: {
+                type: 1,
+                state: 2,
+                isEnd: 1,
+            },
+        }
+    },
+    computed: {
+        state: function (list) {
+            let s = '';
+            if (list.isEnd === "1")
+                s = '已结束'
+            else
+                s = '进行中'
+            return s
+        }
+    },
+    created() {
+        this.getslide()
+    },
+    methods: {
+        // 获取所有活动信息
+        async getslide() {
+            if (this.selectOpt === "all") {
+                const { data: res } = await this.$http.post('/system/activity/list', this.info1)
+                console.log(res)
+                if (res.code !== 200) return this.$message.error('数据请求失败')
+                this.list = res.rows;
+            }
+            else {
+                const { data: res } = await this.$http.post('/system/activity/list', this.info2)
+                console.log(res)
+                if (res.code !== 200) return this.$message.error('数据请求失败')
+                this.list = res.rows;
+            }
+            console.log(this.list)
+        },
+        // 筛选
+        selectChange() {
+            console.log(this.selectOpt)
+            if (this.selectOpt === "all") {
+                this.info2.type = 1;
+                this.info2.state = 2;
+                this.info2.isEnd = 1;
+            }
+            if (this.selectOpt === "ing") {
+                this.info2.type = 1;
+                this.info2.state = 2;
+                this.info2.isEnd = 1;
+            }
+            if (this.selectOpt === "ed") {
+                this.info2.type = 1;
+                this.info2.state = 2;
+                this.info2.isEnd = 2;
+            }
+            if (this.selectOpt === "selected") {
+                this.info2.type = 2;
+                this.info2.state = 2;
+                this.info2.isEnd = 1;
+            }
+            this.getslide()
+        },
+        // 点击查看详情
+        detail(index){
+            console.log("查看活动详情")
+            this.$router.push({
+                path:'/system/actdetail',
+                query:{
+                    id:this.list[index].id
+                }
+            })
+        }
+    }
+}
 </script>
 
 <style scoped>
-.activity{
-    width:1200px;
-    margin:0 auto;
-}
-.activity .img a {
-    display: inline-block;
-    width: 200px;
-    height: 200px;
-    background-color: antiquewhite;
+/* 筛选 */
+.activity .filt {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 0 40px
 }
 
-.activity .img .hide {
-    display: none;
+.activity .mySelect {
+    padding: 5px;
+    cursor: pointer;
 }
 
-.activity .img a:hover .hide {
-    display: block;
-    margin-top: 170px;
-    padding: 15px 30px;
+/* 活动 */
+.activity {
+    width: 1300px;
+    margin: 0 auto;
+    margin-top: 20px;
 }
 
-.activity .img a:hover {
-    /* 设置动画 */
-    transition-duration: 0.7s;
-    background-color: rgba(16, 16, 16, 0.2);
+.Activity {
+    margin-top: 20px;
+}
+
+.Activity .block {
+    width: 80%;
+    height: 150px;
+    margin: 0 auto;
+    margin-top: 10px;
+    background-color: rgb(225, 222, 244);
+    /* background-color: white; */
+}
+.Activity .block:hover{
+    cursor: pointer;
+}
+.Activity .block .left {
+    margin-left: 30px;
+    width:50%;
+}
+
+.Activity .block .left .name {
+    font-size: 30px;
+    font-weight: 550;
+    margin-top: 30px;
+}
+
+.Activity .block .left .college {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.Activity .block .right {
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+.Activity .block .right div {
+    margin-bottom: 5px;
 }
 </style>

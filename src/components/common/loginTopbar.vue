@@ -1,5 +1,4 @@
 <template>
-    <div>
         <div class="header">
             <div slot="title" class="title">学术晚茶</div>
             <div class="right">
@@ -12,7 +11,6 @@
                 <div><a href="#">手机版</a></div>
             </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -25,7 +23,7 @@ export default{
 .header{
     width:100%;
     height:80px;
-    background-color: rgb(185, 224, 226,.4);
+    background-color: rgba(164, 185, 209, 0.6);
 }
 .title{
     margin-top:15px;
@@ -37,6 +35,7 @@ export default{
 .right{
     float: right;
     line-height: 60px;
+    margin-right: 80px;
 }
 .right div{
     display: inline-block;

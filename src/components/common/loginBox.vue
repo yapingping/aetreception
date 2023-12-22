@@ -20,11 +20,11 @@
         <el-form ref="loginformref" :model="loginform" :rules="loginformrules" class="login_form">
             <!-- 用户名 -->
             <el-form-item prop="username">
-                <el-input v-model="loginform.username" prefix-icon="el-icon-arrow-right"></el-input>
+                <el-input v-model="loginform.username" prefix-icon="el-icon-s-custom"></el-input>
             </el-form-item>
             <!-- 密码 -->
             <el-form-item prop="password">
-                <el-input type="password" v-model="loginform.password" prefix-icon="el-icon-arrow-right"></el-input>
+                <el-input type="password" v-model="loginform.password" prefix-icon="el-icon-edit"></el-input>
             </el-form-item>
             <!-- 提交 -->
             <el-form-item class="btns">
@@ -32,13 +32,11 @@
                 <el-button type="info" @click="reset">重置</el-button>
             </el-form-item>
         </el-form>
-        <div> msg {{ loginform.username }}{{ loginform.password }}</div>
+        <!-- <div>{{ loginform.username }}{{ loginform.password }}</div> -->
     </div>
 </template>
 
 <script>
-
-// import getLoginData from 'network/login'
 // import Cookie from 'js-cookie'
 export default {
     name: 'loginBox',
@@ -81,12 +79,14 @@ export default {
                 // 登陆前预验证
                 // console.log(valid)
                 if (!valid) return;
+                // 发起登录请求（地址：login）
                 const { data: result } = await this.$http.post('login', this.loginform)
-                // console.log(result)
-                if (result.meta.status !== 200) return this.$message.error("用户名或密码错误！")
+                console.log(result)
+                // 登陆成功的状态码
+                if (result.code !== 200) return this.$message.error("用户名或密码错误！")
                 this.$message.success("登陆成功！")
                 // 将登陆成功的token保存到客户端sessionStorage中
-                window.sessionStorage.setItem("token",result.data.token)
+                window.sessionStorage.setItem("token",result.token)
                 // 页面跳转
                 this.$router.push('/system')
             })
@@ -101,7 +101,7 @@ export default {
     height: 270px;
     border: 1px black solid;
     text-align: center;
-    background-color: rgb(151, 115, 216, .2);
+    background-color: rgba(255, 255, 255,.4);
     border-radius: 15px;
 }
 

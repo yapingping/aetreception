@@ -8,7 +8,13 @@ import ElementUI from 'element-ui'
 import "element-ui/lib/theme-chalk/index.css"
 // axios
 import axios from 'axios'
-axios.defaults.baseURL="http://127.0.0.1:4523/m1/3767406-0-default",
+axios.defaults.baseURL="http://117.50.163.249:3335",
+// 请求拦截器
+axios.interceptors.request.use(config=>{
+  // console.log(config)
+  config.headers.Authorization = window.sessionStorage.getItem('token')
+  return config
+})
 Vue.prototype.$http=axios
 
 Vue.use(ElementUI)

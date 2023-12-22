@@ -1,5 +1,5 @@
 <template>
-    <div class="login">
+    <div class="main">
         <div class="header">
             <loginTopbar></loginTopbar>
         </div>
@@ -20,10 +20,11 @@ export default {
     }
 };
 </script>
-<!-- scoped:只在该文件下起作用 -->
+
 <style scoped>
-.body {
-    background-image: url('assets/imgs/login.jpg')
+.main {
+    /* background-image: url('assets/imgs/login.jpg'); */
+    height:728px;
 }
 
 .box {

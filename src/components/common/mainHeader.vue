@@ -1,11 +1,10 @@
 <template>
     <div>
         <div class="mainheader">
-            <div slot="title" class="title">学术晚茶</div>
+            <div class="title">学术晚茶</div>
             <div class="right">
-                <div>欢迎：name</div>
+                <div>欢&nbsp;&nbsp;迎&nbsp;&nbsp;!</div>
                 <div><span>|</span></div>
-                <div><a href="#">退出登录</a></div>
                 <div><el-button @click="loginout">退出登录</el-button></div>
             </div>
         </div>
@@ -29,7 +28,7 @@ export default {
 .mainheader {
     width: 1200px;
     height: 80px;
-    background-color:#f5f9f9;
+    background-color:rgb(207, 221, 227);
     margin: 0 auto;
     border-bottom: 1px black solid;
 }

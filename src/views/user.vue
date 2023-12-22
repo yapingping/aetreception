@@ -2,38 +2,90 @@
     <div class="user">
         <div class="myinfo">
             <div class="title">基本信息</div>
-            <div class="change">
-                <button>编辑资料</button>
-                <button>修改密码</button>
-            </div>
-            <div class="info">
 
-                <div class="img">
-                    <img src="" alt="">
-                </div>
-                <div class="username">用户名：{{ username }}</div>
-                <div class="name">姓名：{{ name }}</div>
-                <div class="college">学院：{{ college }}</div>
-                <div class="id">学号：{{ id }}</div>
-                <div class="tel">电话：{{ telephone }}</div>
-            </div>
+            <el-container>
+                <el-aside width="200px">
+                    <el-avatar :size=140 :src="info.avatar"></el-avatar>
+                </el-aside>
+                <el-container>
+                    <el-header>
+                        <el-button @click="showEditDialog()"><i class="el-icon-setting"></i>&nbsp;&nbsp;编辑资料</el-button>
+                        <el-button @click="showChangeDialog()"><i class="el-icon-edit"></i>&nbsp;&nbsp;修改密码</el-button>
+                    </el-header>
+
+                    <!-- 编辑资料对话框 -->
+                    <el-dialog title="编辑资料" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+                        <el-form :model="editForm" label-width="70px" :rules="editFormRules" ref="editFormRef">
+                            <el-form-item label="头像">
+                                <el-input v-model="editForm.avatar" prop="avatar"></el-input>
+                            </el-form-item>
+                            <el-form-item label="姓名">
+                                <el-input v-model="editForm.name" disabled></el-input>
+                            </el-form-item>
+                            <el-form-item label="学院">
+                                <el-input v-model="editForm.faculty" disabled></el-input>
+                            </el-form-item>
+                            <el-form-item label="学号">
+                                <el-input v-model="editForm.userId" disabled></el-input>
+                            </el-form-item>
+                            <el-form-item label="用户名">
+                                <el-input v-model="editForm.userName"></el-input>
+                            </el-form-item>
+                            <el-form-item label="电话">
+                                <el-input v-model="editForm.phonenumber" prop="mobile"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="editDialogVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="editUserInfo">确 定</el-button>
+                        </span>
+                    </el-dialog>
+                    <!-- 修改密码对话框 -->
+                    <el-dialog title="修改密码" :visible.sync="changepwdDialogVisible" width="50%" @close="pwdDialogClosed">
+                        <el-form :model="editForm" label-width="70px" :rules="pwdFormRules" ref="pwdFormRef">
+                            <el-form-item label="用户名">
+                                <el-input v-model="editForm.userName" disabled></el-input>
+                            </el-form-item>
+                            <el-form-item label="旧密码">
+                                <el-input v-model="oldPassword" prop="op"></el-input>
+                            </el-form-item>
+                            <el-form-item label="新密码">
+                                <el-input v-model="newPassword" prop="np"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="changepwdDialogVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="pwdInfo">确 定</el-button>
+                        </span>
+                    </el-dialog>
+
+                    <el-main>
+                        <el-descriptions :column="3" border>
+                            <el-descriptions-item label="用户名">{{ info.userName }}</el-descriptions-item>
+                            <el-descriptions-item label="姓名：">{{ info.name }}</el-descriptions-item>
+                            <el-descriptions-item label="学院：">{{ info.faculty }}</el-descriptions-item>
+                            <el-descriptions-item label="学号：">{{ info.userId }}</el-descriptions-item>
+                            <el-descriptions-item label="电话：">{{ info.phonenumber }}</el-descriptions-item>
+                        </el-descriptions>
+                    </el-main>
+                </el-container>
+            </el-container>
         </div>
         <div class="myactivity">
             <div class="title">我的活动</div>
-            <button>点击查看更多</button>
-            <div class="img">
-                <a href="#">
-                    <div class="hide">点击查看详情</div>
-                </a>
+            <div>
+                <button @click="btnClick">点击查看更多</button>
             </div>
-            <div class="info">
-                <div class="name">主题：{}</div>
-                <div class="college">发起学院：{}</div>
-                <div class="time">举办时间：{}</div>
-                <div class="place">举办地点：{}</div>
-                <div class="max-number">活动最多人数{}</div>
-                <div class="signup-number">报名人数：{}</div>
-                <div class="status">举办状态：{}</div>
+            <div class="myActivity" id="myActivity">
+                <div v-for="item in myActivity" class="info">
+                    <div class="name">{{ item.userImg2 }}</div>
+                    <div class="college">发起学院：{{ item.hbKeyword }}</div>
+                    <div class="time">举办时间：{{ item.lat }}</div>
+                    <div class="place">举办地点：{{ item.address }}</div>
+                    <div class="max-number">活动最多人数：{{ item.hot }}</div>
+                    <div class="signup-number">报名人数：{{ item.hbNum }}</div>
+                    <div class="status">举办状态：{{ state }}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -42,6 +94,129 @@
 <script>
 export default {
     name: 'user',
+    created() {
+        this.getuser()
+    },
+    data() {
+        return {
+            info: {},
+            myActivity: [],
+            editForm: {},
+            // 控制编辑资料对话框的显示与隐藏
+            editDialogVisible: false,
+            // 修改表单验证规则对象
+            editFormRules: {
+                avatar: [
+                    { required: true, message: '请输入图片的链接', trigger: 'blur' },
+                ],
+                mobile: [
+                    { required: true, message: '请输入手机号码', trigger: 'blur' },
+                    // {validator:checkMobile,trigger:'blur'}
+                ]
+            },
+            // 控制修改密码对话框的显示与隐藏
+            changepwdDialogVisible: false,
+            oldPassword: '',
+            newPassword: '',
+            pwdFormRules: {
+                op: [
+                    { required: true, message: "请输入旧密码", trigger: 'blur' }
+                ],
+                np: [
+                    { required: true, message: "请输入旧密码", trigger: 'blur' }
+                ],
+            }
+        }
+    },
+    methods: {
+        // 获取信息
+        async getuser() {
+            const { data: res1 } = await this.$http.get('/user')
+            if (res1.code !== 200) return this.$message.error('用户信息请求失败')
+            this.info = res1.data;
+            this.editForm = this.info;
+            console.log(this.info)
+            const { data: res2 } = await this.$http.get('/system/useractivity/myactivity')
+            if (res2.code !== 200) return this.$message.error('我的活动信息请求失败')
+            this.myActivity = res2.data;
+            console.log(this.myActivity)
+
+        },
+        // 显示全部活动
+        btnClick() {
+            const element = document.getElementById('myActivity')
+            element.style.overflow = 'visible'
+        },
+        // 编辑资料
+        // 展示编辑资料的对话框
+        showEditDialog() {
+            console.log(this.info.name)
+            this.editDialogVisible = true;
+        },
+        // 监听修改用户对话框的关闭事件
+        editDialogClosed() {
+            this.$refs.editFormRef.resetFields()
+        },
+        // 修改用户信息并提交
+        editUserInfo() {
+            this.$refs.editFormRef.validate(async valid => {
+                console.log(valid)
+                if (!valid) return
+                const { data: res } = await this.$http.put('/user', {
+                    avatar: this.editForm.avatar,
+                    userName: this.editForm.userName,
+                    phonenumber: this.editForm.phonenumber
+                })
+                if (res.code !== 200) {
+                    return this.$message.error("更新个人信息失败")
+                }
+                // 关闭对话框
+                this.editDialogVisible = false
+                // 提示修改成功
+                this.$message.success("更新个人信息成功")
+            })
+        },
+        // 修改密码
+        // 展示修改密码的对话框
+        showChangeDialog() {
+            this.changepwdDialogVisible = true
+        },
+        pwdDialogClosed() {
+            this.$refs.pwdFormRef.resetFields()
+        },
+        pwdInfo() {
+            this.$refs.pwdFormRef.validate(async valid => {
+                console.log(valid)
+                if (!valid) return
+                const { data: res } = await this.$http.put('/user/resetPwd', {
+                    userName: this.editForm.userName,
+                    password: this.newPassword,
+                    oldpassword: this.oldPassword,
+                })
+                if (res.code !== 200) {
+                    return this.$message.error("修改密码失败")
+                }
+                if(res.msg==="密码错误"){
+                    return this.$message.error("旧密码输入错误")
+                }
+                // 关闭对话框
+                this.changepwdDialogVisible = false
+                // 提示修改成功
+                this.$message.success("修改密码成功")
+                console.log(res.msg)
+                window.sessionStorage.clear();
+                this.$router.push("/login")
+            })
+        }
+    },
+    computed: {
+        state: function () {
+            let s = '进行中';
+            if (this.myActivity.isEnd === 1)
+                s = '已结束'
+            return s
+        }
+    }
 }
 </script>
 
@@ -52,57 +227,60 @@ export default {
     padding-top: 20px;
 }
 
-.myinfo {
-    height: 150px;
+.el-aside {
+    text-align: center;
+    line-height: 20px;
 }
 
-.myinfo .img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background-color: blueviolet;
+.el-header {
+    line-height: 60px;
 }
 
-.myinfo .info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+.el-main {
+    text-align: center;
+    line-height: 16px;
 }
 
-.myinfo .info div {
-    margin: 20px;
-}
-
-.myinfo .change {
-    float: right;
-}
-
+/* 我的活动 */
 .title {
     font-size: 25px;
     font-weight: 700;
+    /* display: inline-block; */
+}
+
+.myActivity {
+    margin-left: 30px;
+    height: 175px;
+    overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.myactivity button {
+    background-color: rgb(227, 237, 237);
+    margin-top: 10px;
+    padding: 7px;
+    border: 1px solid black;
+    cursor: pointer;
+    /* 鼠标指针样式为手型 */
+}
+
+.myactivity .info {
+    width: 350px;
+    height: 165px;
+    border-radius: 20px;
+    padding: 5px;
+    margin: 3px;
     display: inline-block;
+    background-color: rgb(225, 222, 244);
+    color: black;
+    overflow: hidden;
 }
 
-.myactivity .img a {
-    display: inline-block;
-    width: 200px;
-    height: 200px;
-    background-color: antiquewhite;
-}
-
-.myactivity .img .hide {
-    display: none;
-}
-
-.myactivity .img a:hover .hide {
-    display: block;
-    margin-top: 170px;
-    padding: 15px 30px;
-}
-
-.myactivity .img a:hover {
-    /* 设置动画 */
-    transition-duration: 0.7s;
-    background-color: rgba(16, 16, 16, 0.2);
+.myActivity .info .name {
+    font-size: 18px;
+    font-weight: bold;
 }
 </style>
+
+  
