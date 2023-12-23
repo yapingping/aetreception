@@ -74,17 +74,19 @@
         <div class="myactivity">
             <div class="title">我的活动</div>
             <div>
-                <button @click="btnClick">点击查看更多</button>
+                <button class="more" @click="btnClick">点击查看更多</button>
             </div>
             <div class="myActivity" id="myActivity">
                 <div v-for="item in myActivity" class="info">
                     <div class="name">{{ item.userImg2 }}</div>
-                    <div class="college">发起学院：{{ item.hbKeyword }}</div>
-                    <div class="time">举办时间：{{ item.lat }}</div>
-                    <div class="place">举办地点：{{ item.address }}</div>
-                    <div class="max-number">活动最多人数：{{ item.hot }}</div>
-                    <div class="signup-number">报名人数：{{ item.hbNum }}</div>
-                    <div class="status">举办状态：{{ state }}</div>
+                    <div class="status">
+                        <el-button v-if="item.isEnd === 2" type="info">已结束</el-button>
+                        <el-button v-else type="success">进行中</el-button>
+                    </div>
+                    <div class="college"><i class="el-icon-office-building">&nbsp;&nbsp;</i>发起学院：{{ item.hbKeyword }}</div>
+                    <div class="time"><i class="el-icon-time">&nbsp;&nbsp;</i>举办时间：{{ item.lat }}</div>
+                    <div class="place"><i class="el-icon-location">&nbsp;&nbsp;</i>举办地点：{{ item.address }}</div>
+                    <div class="number"><i class="el-icon-s-custom">&nbsp;&nbsp;</i>{{ item.hot }}&nbsp;/&nbsp;{{ item.hbNum}}</div>
                 </div>
             </div>
         </div>
@@ -196,7 +198,7 @@ export default {
                 if (res.code !== 200) {
                     return this.$message.error("修改密码失败")
                 }
-                if(res.msg==="密码错误"){
+                if (res.msg === "密码错误") {
                     return this.$message.error("旧密码输入错误")
                 }
                 // 关闭对话框
@@ -209,14 +211,6 @@ export default {
             })
         }
     },
-    computed: {
-        state: function () {
-            let s = '进行中';
-            if (this.myActivity.isEnd === 1)
-                s = '已结束'
-            return s
-        }
-    }
 }
 </script>
 
@@ -250,13 +244,14 @@ export default {
 
 .myActivity {
     margin-left: 30px;
-    height: 175px;
+    height: 195px;
     overflow: hidden;
     margin-top: 20px;
     margin-bottom: 20px;
+    line-height: 150%;
 }
 
-.myactivity button {
+.myactivity .more {
     background-color: rgb(227, 237, 237);
     margin-top: 10px;
     padding: 7px;
@@ -267,9 +262,9 @@ export default {
 
 .myactivity .info {
     width: 350px;
-    height: 165px;
+    height: 190px;
     border-radius: 20px;
-    padding: 5px;
+    padding: 29px;
     margin: 3px;
     display: inline-block;
     background-color: rgb(225, 222, 244);

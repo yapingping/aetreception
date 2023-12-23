@@ -50,7 +50,6 @@ export default {
                 path:'/system/column/coldetail',
                 query:{
                     id:this.list[index].id,
-                    list:this.list[index]
                 }
             })
         }

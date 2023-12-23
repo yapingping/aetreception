@@ -12,17 +12,20 @@
             </td>
         </form>
         <div class="Activity">
-            <div class="block" v-for="(item,index) in list" @click="detail(index)">
+            <div class="block" v-for="(item, index) in list" @click="detail(index)">
                 <div class="left">
                     <div class="name">{{ item.userImg2 }}</div>
                     <div class="college"><i class="el-icon-office-building">&nbsp;&nbsp;</i>发起学院：{{ item.hbKeyword }}</div>
                 </div>
                 <div class="right">
-                    <div class="time"><i class="el-icon-time">&nbsp;&nbsp;</i>举办时间：{{ item.lat }}</div>
-                    <div class="place"><i class="el-icon-location">&nbsp;&nbsp;</i>举办地点：{{ item.address }}</div>
-                    <div class="max-number"><i class="el-icon-user">&nbsp;&nbsp;</i>活动最多人数：{{ item.hot }}</div>
-                    <div class="signup-number"><i class="el-icon-s-custom">&nbsp;&nbsp;</i>报名人数：{{ item.hbNum }}</div>
-                    <div class="status"><i class="el-icon-monitor">&nbsp;&nbsp;</i>举办状态：{{ item.isEnd }}</div>
+                    <div class="status">
+                        
+                        <el-button v-if="item.isEnd === 2" type="info">已结束</el-button>
+                        <el-button v-else type="success">进行中</el-button>
+                    </div>
+                    <div class="time"><i class="el-icon-time">&nbsp;&nbsp;</i>{{ item.lat }}</div>
+                    <div class="place"><i class="el-icon-location">&nbsp;&nbsp;</i>{{ item.address }}</div>
+                    <div class="number"><i class="el-icon-s-custom">&nbsp;&nbsp;</i>{{ item.hbNum }}/{{ item.hot }}</div>
                 </div>
             </div>
         </div>
@@ -83,31 +86,34 @@ export default {
                 this.info2.type = 1;
                 this.info2.state = 2;
                 this.info2.isEnd = 1;
+                this.getslide()
             }
             if (this.selectOpt === "ing") {
                 this.info2.type = 1;
                 this.info2.state = 2;
                 this.info2.isEnd = 1;
+                this.getslide()
             }
             if (this.selectOpt === "ed") {
                 this.info2.type = 1;
                 this.info2.state = 2;
                 this.info2.isEnd = 2;
+                this.getslide()
             }
             if (this.selectOpt === "selected") {
                 this.info2.type = 2;
-                this.info2.state = 2;
+                this.info2.state = 1;
                 this.info2.isEnd = 1;
+                this.getslide()
             }
-            this.getslide()
         },
         // 点击查看详情
-        detail(index){
+        detail(index) {
             console.log("查看活动详情")
             this.$router.push({
-                path:'/system/actdetail',
-                query:{
-                    id:this.list[index].id
+                path: '/system/actdetail',
+                query: {
+                    id: this.list[index].id
                 }
             })
         }
@@ -147,12 +153,14 @@ export default {
     background-color: rgb(225, 222, 244);
     /* background-color: white; */
 }
-.Activity .block:hover{
+
+.Activity .block:hover {
     cursor: pointer;
 }
+
 .Activity .block .left {
     margin-left: 30px;
-    width:50%;
+    width: 50%;
 }
 
 .Activity .block .left .name {

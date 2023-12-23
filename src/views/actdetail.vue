@@ -5,18 +5,20 @@
         <div class="left">
 
             <div style="font-size: 35px;font-weight: 600;" class="title">{{ list.userImg2 }}</div>
+            <div class="info2">
+                <el-button v-if="list.type === 1" type="info">未精选</el-button>
+                <el-button v-else type="success">已精选</el-button>
+                <el-button v-if="list.state === 1" type="info">审核中</el-button>
+                <el-button v-else type="success">已审核</el-button>
+            </div>
             <div class="location"><i class="el-icon-office-building">&nbsp;&nbsp;</i>{{ list.hbKeyword }}</div>
             <div class="info1">
                 <div class="time"><i class="el-icon-time">&nbsp;&nbsp;</i>{{ list.lat }}</div>
                 <div class="place"><i class="el-icon-location">&nbsp;&nbsp;</i>{{ list.address }}</div>
             </div>
-            <div class="info2">
-                <div class="type">是否精选{{ list.type }}</div>
-                <div class="state">审核状态{{ list.state }}</div>
-            </div>
             <div class="introduce">
                 <div class="jianjie">简介</div>
-                <div class="intro">{{ list.details }}</div>
+                <div class="intro">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ list.details }}</div>
             </div>
         </div>
         <div class="right">
@@ -57,6 +59,7 @@ export default {
     width: 70%;
     margin: 0 auto;
     margin-top: 20px;
+    font-size: 18px;
 }
 
 .actdetail .left {
@@ -71,10 +74,14 @@ export default {
 .actdetail .left div {
     padding: 8px 0;
 }
-.actdetail .left .introduce .jianjie{
+
+.actdetail .left .introduce .jianjie {
     font-size: 25px;
 }
-
+.actdetail .left .introduce .intro{
+    /* 设置行间距 */
+    line-height: 150%;
+}
 
 
 .actdetail .right {
@@ -84,4 +91,5 @@ export default {
 .actdetail .right img {
     width: 200px;
     height: 200px;
-}</style>
+}
+</style>

@@ -41,8 +41,7 @@ export default {
             this.$router.push({
                 path:'/system/notdetail',
                 query:{
-                    id:this.list[index].id,
-                    list:this.list[index]
+                    noticeId:this.list[index].noticeId,
                 }
             })
         }
@@ -58,8 +57,8 @@ h2{
     margin-top:30px;
 }
 .slider .img {
-    width: 100%;
     height: 500px;
+    width: 100%;
 }
 .slider .el_carousel_item {
     border-radius: 20px;
