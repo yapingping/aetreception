@@ -19,7 +19,7 @@
                 </div>
                 <div class="right">
                     <div class="status">
-                        
+
                         <el-button v-if="item.isEnd === 2" type="info">已结束</el-button>
                         <el-button v-else type="success">进行中</el-button>
                     </div>
@@ -49,18 +49,8 @@ export default {
             },
         }
     },
-    computed: {
-        state: function (list) {
-            let s = '';
-            if (list.isEnd === "1")
-                s = '已结束'
-            else
-                s = '进行中'
-            return s
-        }
-    },
     created() {
-        this.getslide()
+        this.getall()
     },
     methods: {
         // 获取所有活动信息
@@ -107,6 +97,40 @@ export default {
                 this.getslide()
             }
         },
+        async getall() {
+            const { data: res } = await this.$http.post('/system/activity/list', this.info1)
+            console.log(res)
+            if (res.code !== 200) return this.$message.error('数据请求失败')
+            this.list = res.rows;
+            console.log(this.list)
+        },
+        // 筛选
+        // selectChange() {
+        //     this.getall()
+        //     if(this.selectOpt==="all")return;
+        //     if(this.selectOpt==="ing"){
+        //         for(let i of this.list){
+        //             if(i.isEnd!=1){
+        //                 // let newArray = array.filter(item => item !== elementToRemove);
+        //                 this.list = this.list.filter(item=>item!==i)
+        //             }
+        //         }
+        //     }
+        //     if(this.selectOpt==="ed"){
+        //         for(let i of this.list){
+        //             if(i.isEnd!=2){
+        //                 this.list = this.list.filter(item=>item!==i)
+        //             }
+        //         }
+        //     }
+        //     if(this.selectOpt==="selected"){
+        //         for(let i of this.list){
+        //             if(i.type!=2){
+        //                 this.list = this.list.filter(item=>item!==i)
+        //             }
+        //         }
+        //     }
+        // },
         // 点击查看详情
         detail(index) {
             console.log("查看活动详情")

@@ -15,6 +15,12 @@
             <div class="info1">
                 <div class="time"><i class="el-icon-time">&nbsp;&nbsp;</i>{{ list.lat }}</div>
                 <div class="place"><i class="el-icon-location">&nbsp;&nbsp;</i>{{ list.address }}</div>
+                <div class="number"><i class="el-icon-s-custom">&nbsp;&nbsp;</i>{{ list.hbNum }}/{{ list.hot }}</div>
+                <div class="speaker">主讲人：{{ list.img }}</div>
+            </div>
+            <div class="isApplication">
+                <el-button v-if="list.isApplication.length != 0" type="info">已报名</el-button>
+                <el-button v-else type="success">未报名</el-button>
             </div>
             <div class="introduce">
                 <div class="jianjie">简介</div>
@@ -49,6 +55,7 @@ export default {
             }
             this.list = res.data;
             console.log(this.list)
+            console.log(this.list.isApplication)
         }
     }
 }
@@ -78,7 +85,8 @@ export default {
 .actdetail .left .introduce .jianjie {
     font-size: 25px;
 }
-.actdetail .left .introduce .intro{
+
+.actdetail .left .introduce .intro {
     /* 设置行间距 */
     line-height: 150%;
 }

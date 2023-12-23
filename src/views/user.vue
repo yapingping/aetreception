@@ -264,7 +264,7 @@ export default {
     width: 350px;
     height: 190px;
     border-radius: 20px;
-    padding: 29px;
+    padding: 9px;
     margin: 3px;
     display: inline-block;
     background-color: rgb(225, 222, 244);
