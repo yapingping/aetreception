@@ -1,8 +1,8 @@
 @font-face {
-  font-family: "iconfont"; /* Project id 4116542 */
-  src: url('iconfont.woff2?t=1686494893894') format('woff2'),
-       url('iconfont.woff?t=1686494893894') format('woff'),
-       url('iconfont.ttf?t=1686494893894') format('truetype');
+  font-family: "iconfont"; /* Project id 4387909 */
+  src: url('iconfont.woff2?t=1703511033720') format('woff2'),
+       url('iconfont.woff?t=1703511033720') format('woff'),
+       url('iconfont.ttf?t=1703511033720') format('truetype');
 }
 
 .iconfont {
@@ -13,19 +13,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-zhixianghuishou:before {
-  content: "\e61c";
+.icon-miaojiesellerlooked:before {
+  content: "\e669";
 }
 
-.icon-kehuishou-buliaolei:before {
-  content: "\e61d";
-}
-
-.icon-kehuishou-jinshulei:before {
-  content: "\e61e";
-}
-
-.icon-kehuishou-bolilei:before {
-  content: "\e61f";
+.icon-a-44tubiao-208:before {
+  content: "\e6a3";
 }
 

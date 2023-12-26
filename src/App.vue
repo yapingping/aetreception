@@ -15,6 +15,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 @import "assets/css/base.css";
+@import "assets/iconfont/iconfont.css";
+.el-button{
+  cursor: auto;
+}
+.el-button:hover {
+  box-shadow: none !important;  /* 使用!important确保覆盖其他样式 */
+}
 </style>

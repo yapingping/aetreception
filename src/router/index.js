@@ -11,7 +11,6 @@ import column from 'views/column'
 import science from 'views/science'
 import splendidmonent from 'views/splendidmonent'
 import user from 'views/user'
-import notdetail from 'views/notdetail'
 import actdetail from 'views/actdetail'
 import coldetail from 'views/coldetail'
 
@@ -38,10 +37,6 @@ const routes = [
         path: 'home',
         component: home,
         children: [],
-      },
-      {
-        path:'notdetail',
-        component:notdetail,
       },
       {
         path: 'activity',

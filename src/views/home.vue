@@ -6,7 +6,7 @@
             <el-carousel-item class="el_carousel_item" v-for="(notice,index) in list">
                 <div class="block" @click="detail(index)">
                     <img class="img" :src="notice.img" alt="">
-                    <div class="title"> {{ notice.title }}</div>
+                    <!-- <div class="title"> {{ notice.title }}</div> -->
                 </div>
             </el-carousel-item>
         </el-carousel>
@@ -39,9 +39,9 @@ export default {
             console.log("查看详情")
             console.log(index)
             this.$router.push({
-                path:'/system/notdetail',
+                path:'/system/column/coldetail',
                 query:{
-                    noticeId:this.list[index].noticeId,
+                    id:this.list[index].specialId,
                 }
             })
         }

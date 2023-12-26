@@ -5,4 +5,4 @@ export function getLoginData(){
    return request({
     url:'/login'
    })
-}  
+} 

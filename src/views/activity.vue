@@ -92,8 +92,8 @@ export default {
             }
             if (this.selectOpt === "selected") {
                 this.info2.type = 2;
-                this.info2.state = 1;
-                this.info2.isEnd = 1;
+                this.info2.state = 2;
+                this.info2.isEnd = 2;
                 this.getslide()
             }
         },
@@ -171,7 +171,7 @@ export default {
 
 .Activity .block {
     width: 80%;
-    height: 150px;
+    height: 180px;
     margin: 0 auto;
     margin-top: 10px;
     background-color: rgb(225, 222, 244);

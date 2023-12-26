@@ -19,8 +19,11 @@
                 <div class="speaker">主讲人：{{ list.img }}</div>
             </div>
             <div class="isApplication">
-                <el-button v-if="list.isApplication.length != 0" type="info">已报名</el-button>
-                <el-button v-else type="success">未报名</el-button>
+                <span v-if="list.isApplication.length !== 0"> <el-button type="info">已报名</el-button></span>
+                <span v-else>
+                    <el-button type="success">未报名</el-button>
+                    <el-button type="success" @click="signup">点击报名</el-button>
+                </span>
             </div>
             <div class="introduce">
                 <div class="jianjie">简介</div>
@@ -55,7 +58,16 @@ export default {
             }
             this.list = res.data;
             console.log(this.list)
-            console.log(this.list.isApplication)
+            console.log(this.list.isApplication.length)
+        },
+
+        async signup(){
+            const { data: res } = await this.$http.post('/system/useractivity',{activityId:this.list.id})
+            console.log(res)
+            if (res.code !== 200) {
+                return this.$message.error(res.msg)
+            }
+            location.reload();
         }
     }
 }

@@ -17,7 +17,13 @@
                     <el-dialog title="编辑资料" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
                         <el-form :model="editForm" label-width="70px" :rules="editFormRules" ref="editFormRef">
                             <el-form-item label="头像">
-                                <el-input v-model="editForm.avatar" prop="avatar"></el-input>
+                                <el-upload class="avatar-uploader" action="http://117.50.163.249:3335/system/common/upload"
+                                :headers="{'Authorization':token}"
+                                    :show-file-list="false" :on-success="handleAvatarSuccess"
+                                    :before-upload="beforeAvatarUpload">
+                                    <img v-if="editForm.avatar" :src="editForm.avatar" class="avatar">
+                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                </el-upload>
                             </el-form-item>
                             <el-form-item label="姓名">
                                 <el-input v-model="editForm.name" disabled></el-input>
@@ -78,15 +84,16 @@
             </div>
             <div class="myActivity" id="myActivity">
                 <div v-for="item in myActivity" class="info">
-                    <div class="name">{{ item.userImg2 }}</div>
+                    <div class="name" @click="detail(item.activityId)">{{ item.userImg2 }}</div>
                     <div class="status">
                         <el-button v-if="item.isEnd === 2" type="info">已结束</el-button>
                         <el-button v-else type="success">进行中</el-button>
                     </div>
                     <div class="college"><i class="el-icon-office-building">&nbsp;&nbsp;</i>发起学院：{{ item.hbKeyword }}</div>
-                    <div class="time"><i class="el-icon-time">&nbsp;&nbsp;</i>举办时间：{{ item.lat }}</div>
-                    <div class="place"><i class="el-icon-location">&nbsp;&nbsp;</i>举办地点：{{ item.address }}</div>
-                    <div class="number"><i class="el-icon-s-custom">&nbsp;&nbsp;</i>{{ item.hot }}&nbsp;/&nbsp;{{ item.hbNum}}</div>
+                    <div class="time"><i class="el-icon-time">&nbsp;&nbsp;</i>{{ item.lat }}</div>
+                    <div class="place"><i class="el-icon-location">&nbsp;&nbsp;</i>{{ item.address }}</div>
+                    <div class="number"><i class="el-icon-s-custom">&nbsp;&nbsp;</i>{{ item.hbNum }}&nbsp;/&nbsp;{{ item.hot
+                    }}</div>
                 </div>
             </div>
         </div>
@@ -100,7 +107,15 @@ export default {
         this.getuser()
     },
     data() {
+        var checkMobile = (rule, value, cb) => {
+            const regMobile = /^(0|86|17951)?(13[0-9]|15[0123456789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+            if (regMobile.test(value)) {
+                return cb()
+            }
+            cb(new Error("请输入正确的手机号"))
+        }
         return {
+            token:'',
             info: {},
             myActivity: [],
             editForm: {},
@@ -109,13 +124,14 @@ export default {
             // 修改表单验证规则对象
             editFormRules: {
                 avatar: [
-                    { required: true, message: '请输入图片的链接', trigger: 'blur' },
+                    { required: false, message: '请输入图片的链接', trigger: 'blur' },
                 ],
                 mobile: [
                     { required: true, message: '请输入手机号码', trigger: 'blur' },
-                    // {validator:checkMobile,trigger:'blur'}
+                    { validator: checkMobile, trigger: 'blur' }
                 ]
             },
+            imageUrl: '',
             // 控制修改密码对话框的显示与隐藏
             changepwdDialogVisible: false,
             oldPassword: '',
@@ -125,7 +141,8 @@ export default {
                     { required: true, message: "请输入旧密码", trigger: 'blur' }
                 ],
                 np: [
-                    { required: true, message: "请输入旧密码", trigger: 'blur' }
+                    { required: true, message: "请输入新密码", trigger: 'blur' },
+                    // { min: 3, max: 10, message: "长度为3-10个字符", trigger: "blur" }
                 ],
             }
         }
@@ -178,6 +195,22 @@ export default {
                 this.$message.success("更新个人信息成功")
             })
         },
+        // 修改头像
+        handleAvatarSuccess(res) {
+            this.editForm.avatar = res.msg;
+        },
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
         // 修改密码
         // 展示修改密码的对话框
         showChangeDialog() {
@@ -209,8 +242,20 @@ export default {
                 window.sessionStorage.clear();
                 this.$router.push("/login")
             })
+        },
+        detail(ID) {
+            console.log(ID)
+            this.$router.push({
+                path: '/system/actdetail',
+                query: {
+                    id: ID
+                }
+            })
         }
     },
+    mounted(){
+        this.token=window.sessionStorage.getItem('token')
+    }
 }
 </script>
 
@@ -233,6 +278,34 @@ export default {
 .el-main {
     text-align: center;
     line-height: 16px;
+}
+
+/* 修改头像 */
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+}
+
+.avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
 }
 
 /* 我的活动 */
@@ -275,7 +348,6 @@ export default {
 .myActivity .info .name {
     font-size: 18px;
     font-weight: bold;
-}
-</style>
+}</style>
 
   

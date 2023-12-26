@@ -24,6 +24,7 @@ export default {
 <style scoped>
 .main {
     /* background-image: url('assets/imgs/login.jpg'); */
+    background-color: rgb(225, 232, 239);
     height:728px;
 }
 

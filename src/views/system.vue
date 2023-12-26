@@ -61,7 +61,7 @@ export default {
 
 .detail {
     width: 100%;
-    height: 500px;
+    /* height: 500px; */
     background-color: pink;
     margin: 0 auto;
     /* 设置渐变 */

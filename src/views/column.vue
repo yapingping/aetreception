@@ -12,28 +12,7 @@
 
 <script>
 export default {
-    // data() {
-    //     return {
-    //         total: 0,
-    //         list: []
-    //     }
-    // },
-    // props: {
-    // },
-    // created() {
-    //     this.getslide()
-    // },
-    // methods: {
-    //     // 获取精彩专栏数据
-    //     async getslide() {
-    //         const { data: res } = await this.$http.get('/system/column/list')
-    //         if (res.code !== 200) return this.$message.error('数据请求失败')
-    //         this.list = res.rows;
-    //         this.total = res.total;
-    //         // console.log(this.total)
-    //         console.log(this.list)
-    //     }
-    // }
+    name:'column',
 }
 </script>
 
